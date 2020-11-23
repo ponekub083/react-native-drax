@@ -807,6 +807,15 @@ export interface DraxListOnItemReorderEventData<TItem> {
 	toIndex: number;
 }
 
+
+export interface DraxListOnScrollWithRefEventData {
+	/* The item that was moved */
+	ref: any;
+}
+export interface DraxListOnScrollCallbackEventData<Position> {
+	newPosition :  Position ;
+}
+
 /** Render function for content of a DraxList item's DraxView */
 export interface DraxListRenderItemContent<TItem> {
 	(info: ListRenderItemInfo<TItem>, props: DraxRenderContentProps): ReactNode;
@@ -821,6 +830,7 @@ export interface DraxListRenderItemHoverContent<TItem> {
 export interface DraxListOnItemReorder<TItem> {
 	(eventData: DraxListOnItemReorderEventData<TItem>): void;
 }
+
 
 /** Props for a DraxList; extends standard FlatList props */
 export interface DraxListProps<TItem> extends Omit<FlatListProps<TItem>, 'renderItem'>, DraxAutoScrollProps {
@@ -850,4 +860,8 @@ export interface DraxListProps<TItem> extends Omit<FlatListProps<TItem>, 'render
 
 	/** Can the list be reordered by dragging items? Defaults to true if onItemReorder is set. */
 	reorderable?: boolean;
+	
+	onScrollCallBack?: (eventData : Position) =>void;
+
+	onScrollWithRef?: (eventData : DraxListOnScrollWithRefEventData) =>void;
 }

@@ -33,6 +33,7 @@ import {
 	DraxProtocolDragEndResponse,
 	DraxSnapbackTargetPreset,
 	isWithCancelledFlag,
+	
 } from './types';
 import { defaultListItemLongPressDelay } from './params';
 
@@ -64,6 +65,8 @@ export const DraxList = <T extends unknown>(
 		onItemReorder,
 		id: idProp,
 		reorderable: reorderableProp,
+		onScrollCallBack,
+		onScrollWithRef,
 		...props
 	}: PropsWithChildren<DraxListProps<T>>,
 ): ReactElement | null => {
@@ -262,16 +265,19 @@ export const DraxList = <T extends unknown>(
 		(ref) => {
 			flatListRef.current = ref;
 			nodeHandleRef.current = ref && findNodeHandle(ref);
+			onScrollWithRef?.(ref);
 		},
-		[],
+		[onScrollWithRef],
 	);
 
 	// Update tracked scroll position when list is scrolled.
 	const onScroll = useCallback(
 		({ nativeEvent: { contentOffset } }: NativeSyntheticEvent<NativeScrollEvent>) => {
 			scrollPositionRef.current = { ...contentOffset };
+			const newPosition : Position = { x : contentOffset.x  , y : contentOffset.y } ;
+			onScrollCallBack?.(newPosition);
 		},
-		[],
+		[onScrollCallBack],
 	);
 
 	// Handle auto-scrolling on interval.
